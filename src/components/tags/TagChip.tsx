@@ -35,8 +35,7 @@ export function TagChip({
       variant={selected ? "default" : "secondary"}
       className={cn(
         "cursor-pointer transition-all gap-1",
-        sizeClasses[size],
-        selected && "ring-2 ring-offset-1 ring-primary"
+        sizeClasses[size]
       )}
       style={{
         backgroundColor: selected ? tag.color : tag.color + "20",

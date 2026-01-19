@@ -27,7 +27,8 @@ export function CalendarView() {
     return Array.from(logsByDate.entries()).map(([date, hours]) => ({
       title: `${hours}h logged`,
       date,
-      backgroundColor: hours >= 8 ? "#22c55e" : hours >= 4 ? "#eab308" : "#94a3b8",
+      backgroundColor:
+        hours >= 8 ? "#22c55e" : hours >= 4 ? "#eab308" : "#94a3b8",
       borderColor: "transparent",
     }));
   }, [logs]);
@@ -48,11 +49,11 @@ export function CalendarView() {
         </div>
       </div>
 
-      <Card className="flex-1">
-        <CardHeader>
+      <Card className="flex-1 py-4 md:py-6 gap-3 md:gap-6">
+        <CardHeader className="px-3 md:px-6">
           <CardTitle>Monthly Overview</CardTitle>
         </CardHeader>
-        <CardContent className="p-2 md:p-6">
+        <CardContent className="px-2 md:px-6 md:py-0">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"

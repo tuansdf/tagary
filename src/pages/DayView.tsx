@@ -6,7 +6,11 @@ import { LogEntryModal } from "@/components/log-entry";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAppStore, useLogStore, useTagStore } from "@/stores";
 import type { Hour, LogEntry, TimeRange } from "@/types";
-import type { DateSelectArg, EventClickArg, EventInput } from "@fullcalendar/core";
+import type {
+  DateSelectArg,
+  EventClickArg,
+  EventInput,
+} from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
@@ -16,7 +20,7 @@ import { useMemo, useRef, useState } from "react";
 
 export function DayView() {
   const calendarRef = useRef<FullCalendar>(null);
-  const { selectedDate, setSelectedDate} = useAppStore();
+  const { selectedDate, setSelectedDate } = useAppStore();
   // Subscribe to logs array directly to trigger re-render on hydration
   const logs = useLogStore((state) => state.logs);
   const { getTagById } = useTagStore();
@@ -25,14 +29,19 @@ export function DayView() {
   const [selectedRange, setSelectedRange] = useState<TimeRange | null>(null);
   const [editingLog, setEditingLog] = useState<LogEntry | undefined>();
   // Track visible date range for week view
-  const [visibleRange, setVisibleRange] = useState<{ start: string; end: string }>({
+  const [visibleRange, setVisibleRange] = useState<{
+    start: string;
+    end: string;
+  }>({
     start: selectedDate,
     end: selectedDate,
   });
 
   // Filter logs for the visible date range (works for both day and week views)
   const visibleLogs = useMemo(() => {
-    return logs.filter((log) => log.date >= visibleRange.start && log.date <= visibleRange.end);
+    return logs.filter(
+      (log) => log.date >= visibleRange.start && log.date <= visibleRange.end,
+    );
   }, [logs, visibleRange]);
 
   // Convert logs to FullCalendar events
@@ -90,7 +99,7 @@ export function DayView() {
     // end is exclusive in FullCalendar, so subtract 1 day
     const newEndDate = dayjs(arg.end).subtract(1, "day").format("YYYY-MM-DD");
     setVisibleRange({ start: newStartDate, end: newEndDate });
-    
+
     // Update selected date to the start of the visible range
     if (newStartDate !== selectedDate) {
       setSelectedDate(newStartDate);
@@ -114,8 +123,8 @@ export function DayView() {
         </div>
       </div>
 
-      <Card className="flex-1">
-        <CardContent className="p-2 md:p-4">
+      <Card className="flex-1 py-4 md:py-6">
+        <CardContent className="px-4 md:px-6">
           <FullCalendar
             ref={calendarRef}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -126,14 +135,15 @@ export function DayView() {
               center: "title",
               right: "timeGridDay,timeGridWeek",
             }}
+            titleFormat={{ day: "2-digit", month: "2-digit", year: "numeric" }}
             slotMinTime="00:00:00"
             slotMaxTime="24:00:00"
             slotDuration="01:00:00"
             slotLabelInterval="01:00:00"
             slotLabelFormat={{
-              hour: "numeric",
+              hour: "2-digit",
               minute: "2-digit",
-              meridiem: "short",
+              hour12: false,
             }}
             allDaySlot={false}
             selectable={true}
@@ -145,12 +155,16 @@ export function DayView() {
             height="auto"
             expandRows={true}
             nowIndicator={true}
-            dayHeaderFormat={{ weekday: "long", month: "short", day: "numeric" }}
+            dayHeaderFormat={{
+              weekday: "short",
+              day: "2-digit",
+              month: "2-digit",
+            }}
             eventDisplay="block"
             eventTimeFormat={{
-              hour: "numeric",
+              hour: "2-digit",
               minute: "2-digit",
-              meridiem: "short",
+              hour12: false,
             }}
           />
         </CardContent>

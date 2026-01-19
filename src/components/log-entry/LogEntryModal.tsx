@@ -33,7 +33,7 @@ export function LogEntryModal({
   existingLog,
 }: LogEntryModalProps) {
   const { selectedDate } = useAppStore();
-  const { addLog, updateLog, deleteLog, removeConflictingLogs } = useLogStore();
+  const { addLog, updateLog, deleteLog } = useLogStore();
   const { getTagById, incrementTagUsage } = useTagStore();
 
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
@@ -77,9 +77,6 @@ export function LogEntryModal({
         note: note.trim() || undefined,
       });
     } else {
-      // Remove any conflicting logs
-      removeConflictingLogs(selectedDate, range);
-
       // Add new log
       addLog({
         date: selectedDate,
