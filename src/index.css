@@ -324,3 +324,91 @@
 .fc .fc-popover-body {
   padding: 0.5rem;
 }
+
+/* TimeGrid specific styles */
+.fc .fc-timegrid-slot {
+  height: 3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.fc .fc-timegrid-slot-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  vertical-align: top;
+  padding-top: 0.25rem;
+}
+
+.fc .fc-timegrid-axis {
+  padding: 0 0.5rem;
+  width: 4rem;
+}
+
+.fc .fc-timegrid-col {
+  background-color: var(--card);
+}
+
+.fc .fc-timegrid-now-indicator-line {
+  border-color: var(--destructive);
+  border-width: 2px;
+}
+
+.fc .fc-timegrid-now-indicator-arrow {
+  border-color: var(--destructive);
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+/* Selection highlight */
+.fc .fc-highlight {
+  background-color: var(--primary);
+  opacity: 0.15;
+}
+
+/* TimeGrid events */
+.fc .fc-timegrid-event {
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.fc .fc-timegrid-event .fc-event-main {
+  padding: 0.125rem 0;
+}
+
+.fc .fc-timegrid-event .fc-event-time {
+  font-size: 0.625rem;
+  opacity: 0.8;
+}
+
+/* Week view header */
+.fc .fc-timegrid-axis-frame {
+  justify-content: flex-start;
+  padding-top: 0.5rem;
+}
+
+/* Scrollable area */
+.fc .fc-timegrid-body {
+  overflow: visible;
+}
+
+.fc .fc-scroller-liquid-absolute {
+  overflow: auto !important;
+}
+
+/* Day header in week view */
+.fc .fc-timegrid .fc-col-header-cell {
+  padding: 0.5rem;
+}
+
+.fc .fc-timegrid .fc-col-header-cell-cushion {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* Current day highlight in week view */
+.fc .fc-timegrid .fc-day-today {
+  background-color: var(--accent);
+}
