@@ -2,6 +2,7 @@
  * CalendarView - Monthly calendar overview with FullCalendar
  */
 
+import { PageHeader } from "@/components/shared";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppStore, useLogStore } from "@/stores";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -16,7 +17,6 @@ export function CalendarView() {
 
   // Convert logs to calendar events
   const events = useMemo(() => {
-    // Group logs by date
     const logsByDate = new Map<string, number>();
     logs.forEach((log) => {
       const count = logsByDate.get(log.date) || 0;
@@ -40,14 +40,10 @@ export function CalendarView() {
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Calendar</h1>
-          <p className="text-muted-foreground">
-            View your logged days at a glance
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Calendar"
+        description="View your logged days at a glance"
+      />
 
       <Card className="flex-1 py-4 md:py-6 gap-3 md:gap-6">
         <CardHeader className="px-3 md:px-6">

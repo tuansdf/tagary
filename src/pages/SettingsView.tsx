@@ -2,6 +2,7 @@
  * SettingsView - Tag management and app settings
  */
 
+import { PageHeader } from "@/components/shared";
 import { TagChip } from "@/components/tags";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,111 +22,49 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useTagManagement } from "@/hooks";
 import { useAppStore, useTagStore } from "@/stores";
-import type { Tag, TagCategory } from "@/types";
 import { Monitor, Moon, Pencil, Plus, Sun, Trash2 } from "lucide-react";
-import { useState } from "react";
 
 export function SettingsView() {
-  const { tags, categories, addTag, updateTag, deleteTag, addCategory, updateCategory, deleteCategory } = useTagStore();
+  const { tags, deleteTag, deleteCategory } = useTagStore();
   const { theme, setTheme } = useAppStore();
 
-  const [isTagDialogOpen, setIsTagDialogOpen] = useState(false);
-  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
-  const [editingTag, setEditingTag] = useState<Tag | null>(null);
-  const [editingCategory, setEditingCategory] = useState<TagCategory | null>(null);
-
-  // Tag form state
-  const [tagName, setTagName] = useState("");
-  const [tagColor, setTagColor] = useState("#3b82f6");
-  const [tagCategoryId, setTagCategoryId] = useState("");
-
-  // Category form state
-  const [categoryName, setCategoryName] = useState("");
-  const [categoryColor, setCategoryColor] = useState("#3b82f6");
-  const [categoryIcon, setCategoryIcon] = useState("tag");
-
-  const openTagDialog = (tag?: Tag) => {
-    if (tag) {
-      setEditingTag(tag);
-      setTagName(tag.name);
-      setTagColor(tag.color);
-      setTagCategoryId(tag.categoryId);
-    } else {
-      setEditingTag(null);
-      setTagName("");
-      setTagColor("#3b82f6");
-      setTagCategoryId(categories[0]?.id || "");
-    }
-    setIsTagDialogOpen(true);
-  };
-
-  const openCategoryDialog = (category?: TagCategory) => {
-    if (category) {
-      setEditingCategory(category);
-      setCategoryName(category.name);
-      setCategoryColor(category.color);
-      setCategoryIcon(category.icon);
-    } else {
-      setEditingCategory(null);
-      setCategoryName("");
-      setCategoryColor("#3b82f6");
-      setCategoryIcon("tag");
-    }
-    setIsCategoryDialogOpen(true);
-  };
-
-  const handleSaveTag = () => {
-    if (!tagName.trim() || !tagCategoryId) return;
-
-    if (editingTag) {
-      updateTag(editingTag.id, {
-        name: tagName.trim(),
-        color: tagColor,
-        categoryId: tagCategoryId,
-      });
-    } else {
-      addTag({
-        name: tagName.trim(),
-        color: tagColor,
-        categoryId: tagCategoryId,
-      });
-    }
-    setIsTagDialogOpen(false);
-  };
-
-  const handleSaveCategory = () => {
-    if (!categoryName.trim()) return;
-
-    if (editingCategory) {
-      updateCategory(editingCategory.id, {
-        name: categoryName.trim(),
-        color: categoryColor,
-        icon: categoryIcon,
-      });
-    } else {
-      addCategory({
-        name: categoryName.trim(),
-        color: categoryColor,
-        icon: categoryIcon,
-        order: categories.length,
-      });
-    }
-    setIsCategoryDialogOpen(false);
-  };
-
-  const sortedCategories = [...categories].sort((a, b) => a.order - b.order);
+  const {
+    // Tag dialog
+    isTagDialogOpen,
+    editingTag,
+    tagName,
+    tagColor,
+    tagCategoryId,
+    setTagName,
+    setTagColor,
+    setTagCategoryId,
+    openTagDialog,
+    closeTagDialog,
+    handleSaveTag,
+    canSaveTag,
+    // Category dialog
+    isCategoryDialogOpen,
+    editingCategory,
+    categoryName,
+    categoryColor,
+    setCategoryName,
+    setCategoryColor,
+    openCategoryDialog,
+    closeCategoryDialog,
+    handleSaveCategory,
+    canSaveCategory,
+    // Data
+    sortedCategories,
+  } = useTagManagement();
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
-          <p className="text-muted-foreground">
-            Manage your tags and preferences
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Settings"
+        description="Manage your tags and preferences"
+      />
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Theme Settings */}
@@ -277,7 +216,7 @@ export function SettingsView() {
       </Card>
 
       {/* Tag Dialog */}
-      <Dialog open={isTagDialogOpen} onOpenChange={setIsTagDialogOpen}>
+      <Dialog open={isTagDialogOpen} onOpenChange={closeTagDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{editingTag ? "Edit Tag" : "New Tag"}</DialogTitle>
@@ -323,10 +262,10 @@ export function SettingsView() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsTagDialogOpen(false)}>
+            <Button variant="outline" onClick={closeTagDialog}>
               Cancel
             </Button>
-            <Button onClick={handleSaveTag} disabled={!tagName.trim()}>
+            <Button onClick={handleSaveTag} disabled={!canSaveTag}>
               {editingTag ? "Save" : "Create"}
             </Button>
           </DialogFooter>
@@ -334,7 +273,7 @@ export function SettingsView() {
       </Dialog>
 
       {/* Category Dialog */}
-      <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
+      <Dialog open={isCategoryDialogOpen} onOpenChange={closeCategoryDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{editingCategory ? "Edit Category" : "New Category"}</DialogTitle>
@@ -366,10 +305,10 @@ export function SettingsView() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCategoryDialogOpen(false)}>
+            <Button variant="outline" onClick={closeCategoryDialog}>
               Cancel
             </Button>
-            <Button onClick={handleSaveCategory} disabled={!categoryName.trim()}>
+            <Button onClick={handleSaveCategory} disabled={!canSaveCategory}>
               {editingCategory ? "Save" : "Create"}
             </Button>
           </DialogFooter>
