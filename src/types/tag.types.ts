@@ -32,7 +32,10 @@ export const DEFAULT_CATEGORIES: Omit<TagCategory, "id">[] = [
 ];
 
 /** Default tags for each category */
-export const DEFAULT_TAGS: Record<string, Omit<Tag, "id" | "categoryId" | "createdAt" | "usageCount">[]> = {
+export const DEFAULT_TAGS: Record<
+  string,
+  Omit<Tag, "id" | "categoryId" | "createdAt" | "usageCount">[]
+> = {
   Mood: [
     { name: "Happy", color: "#fcd34d", icon: "smile" },
     { name: "Anxious", color: "#fbbf24", icon: "frown" },

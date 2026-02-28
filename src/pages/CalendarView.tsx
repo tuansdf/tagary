@@ -20,7 +20,9 @@ export function CalendarView() {
     const logsByDate = new Map<string, number>();
     logs.forEach((log) => {
       const count = logsByDate.get(log.date) || 0;
-      const hours = log.timeRange.endHour - log.timeRange.startHour + 1;
+      const hours = log.timeRange
+        ? log.timeRange.endHour - log.timeRange.startHour + 1
+        : 1;
       logsByDate.set(log.date, count + hours);
     });
 

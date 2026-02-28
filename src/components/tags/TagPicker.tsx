@@ -15,23 +15,27 @@ interface TagPickerProps {
   className?: string;
 }
 
-export function TagPicker({ selectedTagIds, onToggleTag, className }: TagPickerProps) {
+export function TagPicker({
+  selectedTagIds,
+  onToggleTag,
+  className,
+}: TagPickerProps) {
   const { tags, categories } = useTagStore();
 
   // Group tags by category
   const tagsByCategory = useMemo(() => {
     const grouped = new Map<string, typeof tags>();
-    
+
     // Sort categories by order
     const sortedCategories = [...categories].sort((a, b) => a.order - b.order);
-    
+
     sortedCategories.forEach((category) => {
       const categoryTags = tags.filter((tag) => tag.categoryId === category.id);
       if (categoryTags.length > 0) {
         grouped.set(category.id, categoryTags);
       }
     });
-    
+
     return grouped;
   }, [tags, categories]);
 
@@ -40,34 +44,36 @@ export function TagPicker({ selectedTagIds, onToggleTag, className }: TagPickerP
   return (
     <ScrollArea className={cn("h-64 rounded-lg border p-3", className)}>
       <div className="space-y-4">
-        {Array.from(tagsByCategory.entries()).map(([categoryId, categoryTags], index) => {
-          const category = getCategoryById(categoryId);
-          if (!category) return null;
+        {Array.from(tagsByCategory.entries()).map(
+          ([categoryId, categoryTags], index) => {
+            const category = getCategoryById(categoryId);
+            if (!category) return null;
 
-          return (
-            <div key={categoryId}>
-              {index > 0 && <Separator className="mb-4" />}
-              <div className="mb-2">
-                <h4
-                  className="text-sm font-medium"
-                  style={{ color: category.color }}
-                >
-                  {category.name}
-                </h4>
+            return (
+              <div key={categoryId}>
+                {index > 0 && <Separator className="mb-4" />}
+                <div className="mb-2">
+                  <h4
+                    className="text-sm font-medium"
+                    style={{ color: category.color }}
+                  >
+                    {category.name}
+                  </h4>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {categoryTags.map((tag) => (
+                    <TagChip
+                      key={tag.id}
+                      tag={tag}
+                      selected={selectedTagIds.includes(tag.id)}
+                      onClick={() => onToggleTag(tag.id)}
+                    />
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {categoryTags.map((tag) => (
-                  <TagChip
-                    key={tag.id}
-                    tag={tag}
-                    selected={selectedTagIds.includes(tag.id)}
-                    onClick={() => onToggleTag(tag.id)}
-                  />
-                ))}
-              </div>
-            </div>
-          );
-        })}
+            );
+          },
+        )}
 
         {tagsByCategory.size === 0 && (
           <p className="text-center text-sm text-muted-foreground py-8">

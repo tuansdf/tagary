@@ -1,9 +1,6 @@
-/**
- * useLogEntryModal - Custom hook for log entry modal logic
- */
-
 import { useAppStore, useLogStore, useTagStore } from "@/stores";
 import type { LogEntry, TimeRange } from "@/types";
+import { EMOTION_OPTIONS } from "@/types";
 import { useCallback, useEffect, useState } from "react";
 
 interface UseLogEntryModalProps {
@@ -13,26 +10,33 @@ interface UseLogEntryModalProps {
   onClose: () => void;
 }
 
-interface UseLogEntryModalReturn {
-  // Form state
-  selectedTagIds: string[];
+interface FormState {
+  tagIds: string[];
   note: string;
-  setNote: (note: string) => void;
+  description: string;
+  characterIds: string[];
+  locationId: string | undefined;
+  emotionScore: number | undefined;
+}
 
-  // Tag helpers
-  selectedTags: ReturnType<typeof useTagStore.getState>["tags"];
-  handleToggleTag: (tagId: string) => void;
-  handleRemoveTag: (tagId: string) => void;
+const EMPTY_FORM: FormState = {
+  tagIds: [],
+  note: "",
+  description: "",
+  characterIds: [],
+  locationId: undefined,
+  emotionScore: undefined,
+};
 
-  // Actions
-  handleSave: () => void;
-  handleDelete: () => void;
-  canSave: boolean;
-
-  // Computed
-  isEditing: boolean;
-  range: TimeRange | null;
-  timeRangeText: string;
+function getFormFromLog(log: LogEntry): FormState {
+  return {
+    tagIds: log.tagIds,
+    note: log.note || "",
+    description: log.description || "",
+    characterIds: log.characterIds || [],
+    locationId: log.locationId,
+    emotionScore: log.emotionScore,
+  };
 }
 
 export function useLogEntryModal({
@@ -40,60 +44,97 @@ export function useLogEntryModal({
   timeRange,
   open,
   onClose,
-}: UseLogEntryModalProps): UseLogEntryModalReturn {
+}: UseLogEntryModalProps) {
   const { selectedDate } = useAppStore();
   const { addLog, updateLog, deleteLog } = useLogStore();
   const { getTagById, incrementTagUsage } = useTagStore();
 
-  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
-  const [note, setNote] = useState("");
-
   const isEditing = !!existingLog;
   const range = existingLog?.timeRange || timeRange;
 
-  // Initialize form when modal opens
+  const [formState, setFormState] = useState<FormState>(EMPTY_FORM);
+
+  // Destructure for convenience
+  const {
+    tagIds: selectedTagIds,
+    note,
+    description,
+    characterIds,
+    locationId,
+    emotionScore,
+  } = formState;
+
+  // Reset form when modal opens/closes or existingLog changes
+
   useEffect(() => {
     if (open) {
-      if (existingLog) {
-        setSelectedTagIds(existingLog.tagIds);
-        setNote(existingLog.note || "");
-      } else {
-        setSelectedTagIds([]);
-        setNote("");
-      }
+      setFormState(existingLog ? getFormFromLog(existingLog) : EMPTY_FORM);
     }
   }, [open, existingLog]);
 
+  const setNote = (v: string) => setFormState((s) => ({ ...s, note: v }));
+  const setDescription = (v: string) =>
+    setFormState((s) => ({ ...s, description: v }));
+  const setLocationId = (v: string | undefined) =>
+    setFormState((s) => ({ ...s, locationId: v }));
+  const setEmotionScore = (v: number | undefined) =>
+    setFormState((s) => ({ ...s, emotionScore: v }));
+
   const handleToggleTag = useCallback((tagId: string) => {
-    setSelectedTagIds((prev) =>
-      prev.includes(tagId)
-        ? prev.filter((id) => id !== tagId)
-        : [...prev, tagId]
-    );
+    setFormState((s) => ({
+      ...s,
+      tagIds: s.tagIds.includes(tagId)
+        ? s.tagIds.filter((id) => id !== tagId)
+        : [...s.tagIds, tagId],
+    }));
   }, []);
 
   const handleRemoveTag = useCallback((tagId: string) => {
-    setSelectedTagIds((prev) => prev.filter((id) => id !== tagId));
+    setFormState((s) => ({
+      ...s,
+      tagIds: s.tagIds.filter((id) => id !== tagId),
+    }));
   }, []);
 
+  const handleAddCharacter = useCallback((charId: string) => {
+    setFormState((s) => ({
+      ...s,
+      characterIds: s.characterIds.includes(charId)
+        ? s.characterIds
+        : [...s.characterIds, charId],
+    }));
+  }, []);
+
+  const handleRemoveCharacter = useCallback((charId: string) => {
+    setFormState((s) => ({
+      ...s,
+      characterIds: s.characterIds.filter((id) => id !== charId),
+    }));
+  }, []);
+
+  const emotionLabel = emotionScore
+    ? EMOTION_OPTIONS.find((o) => o.score === emotionScore)?.label
+    : undefined;
+
   const handleSave = useCallback(() => {
-    if (!range || selectedTagIds.length === 0) return;
+    if (selectedTagIds.length === 0 && !description.trim()) return;
+
+    const logData = {
+      date: selectedDate,
+      timeRange: range || undefined,
+      tagIds: selectedTagIds,
+      note: note.trim() || undefined,
+      description: description.trim() || undefined,
+      characterIds: characterIds.length > 0 ? characterIds : undefined,
+      locationId,
+      emotionScore,
+      emotionLabel,
+    };
 
     if (isEditing && existingLog) {
-      updateLog(existingLog.id, {
-        timeRange: range,
-        tagIds: selectedTagIds,
-        note: note.trim() || undefined,
-      });
+      updateLog(existingLog.id, logData);
     } else {
-      addLog({
-        date: selectedDate,
-        timeRange: range,
-        tagIds: selectedTagIds,
-        note: note.trim() || undefined,
-      });
-
-      // Increment usage count for selected tags
+      addLog(logData);
       selectedTagIds.forEach((tagId) => incrementTagUsage(tagId));
     }
 
@@ -107,6 +148,11 @@ export function useLogEntryModal({
     addLog,
     selectedDate,
     note,
+    description,
+    characterIds,
+    locationId,
+    emotionScore,
+    emotionLabel,
     incrementTagUsage,
     onClose,
   ]);
@@ -122,22 +168,29 @@ export function useLogEntryModal({
     .map((id) => getTagById(id))
     .filter((tag): tag is NonNullable<typeof tag> => Boolean(tag));
 
-  const canSave = selectedTagIds.length > 0;
+  const canSave = selectedTagIds.length > 0 || !!description.trim();
 
-  // Format time range text
-  const formatHour = (hour: number) =>
-    `${String(hour).padStart(2, "0")}:00`;
+  const formatHour = (hour: number) => `${String(hour).padStart(2, "0")}:00`;
 
   const timeRangeText = range
     ? range.startHour === range.endHour
       ? formatHour(range.startHour)
       : `${formatHour(range.startHour)} - ${formatHour(range.endHour)}`
-    : "";
+    : "Cả ngày";
 
   return {
     selectedTagIds,
     note,
     setNote,
+    description,
+    setDescription,
+    characterIds,
+    handleAddCharacter,
+    handleRemoveCharacter,
+    locationId,
+    setLocationId,
+    emotionScore,
+    setEmotionScore,
     selectedTags,
     handleToggleTag,
     handleRemoveTag,

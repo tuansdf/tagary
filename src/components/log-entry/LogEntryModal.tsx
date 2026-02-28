@@ -1,19 +1,19 @@
-/**
- * LogEntryModal - Modal for creating/editing log entries
- */
-
+import { CharacterChip, CharacterMention } from "@/components/characters";
+import { EmotionPicker } from "@/components/emotion/EmotionPicker";
+import { LocationPicker } from "@/components/location/LocationPicker";
 import { TagChip, TagPicker } from "@/components/tags";
 import { Button } from "@/components/ui/button";
 import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useLogEntryModal } from "@/hooks";
+import { useCharacterStore } from "@/stores";
 import type { LogEntry, TimeRange } from "@/types";
 import { Trash2 } from "lucide-react";
 
@@ -33,6 +33,15 @@ export function LogEntryModal({
   const {
     note,
     setNote,
+    description,
+    setDescription,
+    characterIds,
+    handleAddCharacter,
+    handleRemoveCharacter,
+    locationId,
+    setLocationId,
+    emotionScore,
+    setEmotionScore,
     selectedTags,
     handleToggleTag,
     handleRemoveTag,
@@ -44,23 +53,74 @@ export function LogEntryModal({
     timeRangeText,
   } = useLogEntryModal({ existingLog, timeRange, open, onClose });
 
-  if (!range) return null;
+  const { getById } = useCharacterStore();
+
+  const resolvedCharacters = characterIds
+    .map((id) => getById(id))
+    .filter(Boolean) as NonNullable<ReturnType<typeof getById>>[];
+
+  if (!range && !open) return null;
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? "Edit Log Entry" : "New Log Entry"}
+            {isEditing ? "Sửa sự kiện" : "Thêm sự kiện"}
           </DialogTitle>
           <DialogDescription>{timeRangeText}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
+          {/* Description */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Mô tả sự kiện</label>
+            <Textarea
+              placeholder="Hôm nay đã làm gì..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="resize-none"
+              rows={3}
+            />
+          </div>
+
+          {/* Characters (@mention) */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Nhân vật</label>
+            {resolvedCharacters.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {resolvedCharacters.map((char) => (
+                  <CharacterChip
+                    key={char.id}
+                    character={char}
+                    removable
+                    onRemove={() => handleRemoveCharacter(char.id)}
+                  />
+                ))}
+              </div>
+            )}
+            <CharacterMention
+              onSelect={handleAddCharacter}
+              selectedIds={characterIds}
+            />
+          </div>
+
+          {/* Location */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Địa điểm</label>
+            <LocationPicker selectedId={locationId} onSelect={setLocationId} />
+          </div>
+
+          {/* Emotion */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Cảm xúc</label>
+            <EmotionPicker value={emotionScore} onChange={setEmotionScore} />
+          </div>
+
           {/* Selected Tags */}
           {selectedTags.length > 0 && (
             <div className="space-y-2">
-              <label className="text-sm font-medium">Selected Tags</label>
+              <label className="text-sm font-medium">Tags đã chọn</label>
               <div className="flex flex-wrap gap-2">
                 {selectedTags.map((tag) => (
                   <TagChip
@@ -86,13 +146,13 @@ export function LogEntryModal({
 
           {/* Note */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Note (optional)</label>
+            <label className="text-sm font-medium">Ghi chú</label>
             <Textarea
-              placeholder="Add a note about this time..."
+              placeholder="Ghi chú thêm (tùy chọn)..."
               value={note}
               onChange={(e) => setNote(e.target.value)}
               className="resize-none"
-              rows={3}
+              rows={2}
             />
           </div>
         </div>
@@ -101,15 +161,15 @@ export function LogEntryModal({
           {isEditing && (
             <Button variant="destructive" size="sm" onClick={handleDelete}>
               <Trash2 className="mr-2 h-4 w-4" />
-              Delete
+              Xóa
             </Button>
           )}
           <div className="flex gap-2 ml-auto">
             <Button variant="outline" onClick={onClose}>
-              Cancel
+              Hủy
             </Button>
             <Button onClick={handleSave} disabled={!canSave}>
-              {isEditing ? "Save Changes" : "Add Log"}
+              {isEditing ? "Lưu" : "Thêm"}
             </Button>
           </div>
         </DialogFooter>

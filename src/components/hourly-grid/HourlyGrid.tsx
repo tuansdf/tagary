@@ -19,7 +19,8 @@ interface HourlyGridProps {
 const HOURS: Hour[] = Array.from({ length: 24 }, (_, i) => i as Hour);
 
 export function HourlyGrid({ onSelectRange, onEditLog }: HourlyGridProps) {
-  const { selectedDate, goToPreviousDay, goToNextDay, goToToday } = useAppStore();
+  const { selectedDate, goToPreviousDay, goToNextDay, goToToday } =
+    useAppStore();
   const { getLogsForDate } = useLogStore();
 
   const [isDragging, setIsDragging] = useState(false);
@@ -34,10 +35,13 @@ export function HourlyGrid({ onSelectRange, onEditLog }: HourlyGridProps) {
   const getLogForHour = useCallback(
     (hour: Hour): LogEntry | undefined => {
       return logs.find(
-        (log) => hour >= log.timeRange.startHour && hour <= log.timeRange.endHour
+        (log) =>
+          log.timeRange != null &&
+          hour >= log.timeRange.startHour &&
+          hour <= log.timeRange.endHour,
       );
     },
-    [logs]
+    [logs],
   );
 
   // Calculate selected range
@@ -96,21 +100,13 @@ export function HourlyGrid({ onSelectRange, onEditLog }: HourlyGridProps) {
     <Card className="flex-1">
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={goToPreviousDay}
-          >
+          <Button variant="outline" size="icon" onClick={goToPreviousDay}>
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <CardTitle className="text-lg font-semibold">
             {formattedDate}
           </CardTitle>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={goToNextDay}
-          >
+          <Button variant="outline" size="icon" onClick={goToNextDay}>
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>

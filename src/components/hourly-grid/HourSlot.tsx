@@ -3,7 +3,12 @@
  */
 
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useTagStore } from "@/stores";
 import type { Hour, LogEntry } from "@/types";
@@ -43,7 +48,7 @@ export function HourSlot({
               isSelected && "ring-2 ring-primary ring-offset-2",
               isInRange && !isSelected && "bg-primary/10 border-primary/30",
               hasLog && "bg-accent border-accent-foreground/20",
-              !hasLog && "border-border bg-card"
+              !hasLog && "border-border bg-card",
             )}
             onMouseDown={onMouseDown}
             onMouseEnter={onMouseEnter}
@@ -60,7 +65,10 @@ export function HourSlot({
                     key={tag?.id}
                     variant="secondary"
                     className="h-5 px-1.5 text-[10px]"
-                    style={{ backgroundColor: tag?.color + "30", color: tag?.color }}
+                    style={{
+                      backgroundColor: tag?.color + "30",
+                      color: tag?.color,
+                    }}
                   >
                     {tag?.name}
                   </Badge>
@@ -84,7 +92,10 @@ export function HourSlot({
                   <Badge
                     key={tag?.id}
                     variant="secondary"
-                    style={{ backgroundColor: tag?.color + "30", color: tag?.color }}
+                    style={{
+                      backgroundColor: tag?.color + "30",
+                      color: tag?.color,
+                    }}
                   >
                     {tag?.name}
                   </Badge>

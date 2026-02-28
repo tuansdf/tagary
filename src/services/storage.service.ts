@@ -50,11 +50,18 @@ export const storageService = {
 
   // Convenience methods for specific data types
   getTags: () => storageService.get<import("@/types").Tag[]>(STORAGE_KEYS.TAGS),
-  setTags: (tags: import("@/types").Tag[]) => storageService.set(STORAGE_KEYS.TAGS, tags),
+  setTags: (tags: import("@/types").Tag[]) =>
+    storageService.set(STORAGE_KEYS.TAGS, tags),
 
-  getCategories: () => storageService.get<import("@/types").TagCategory[]>(STORAGE_KEYS.CATEGORIES),
-  setCategories: (categories: import("@/types").TagCategory[]) => storageService.set(STORAGE_KEYS.CATEGORIES, categories),
+  getCategories: () =>
+    storageService.get<import("@/types").TagCategory[]>(
+      STORAGE_KEYS.CATEGORIES,
+    ),
+  setCategories: (categories: import("@/types").TagCategory[]) =>
+    storageService.set(STORAGE_KEYS.CATEGORIES, categories),
 
-  getLogs: () => storageService.get<import("@/types").LogEntry[]>(STORAGE_KEYS.LOGS),
-  setLogs: (logs: import("@/types").LogEntry[]) => storageService.set(STORAGE_KEYS.LOGS, logs),
+  getLogs: () =>
+    storageService.get<import("@/types").LogEntry[]>(STORAGE_KEYS.LOGS),
+  setLogs: (logs: import("@/types").LogEntry[]) =>
+    storageService.set(STORAGE_KEYS.LOGS, logs),
 };

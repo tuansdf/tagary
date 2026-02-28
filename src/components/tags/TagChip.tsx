@@ -33,10 +33,7 @@ export function TagChip({
   return (
     <Badge
       variant={selected ? "default" : "secondary"}
-      className={cn(
-        "cursor-pointer transition-all gap-1",
-        sizeClasses[size]
-      )}
+      className={cn("cursor-pointer transition-all gap-1", sizeClasses[size])}
       style={{
         backgroundColor: selected ? tag.color : tag.color + "20",
         color: selected ? "#fff" : tag.color,

@@ -1,10 +1,14 @@
-/**
- * Tagary - Digital Diary Application
- * Main App Component
- */
-
 import { AppLayout } from "@/components/layout";
-import { CalendarView, DayView, InsightsView, SettingsView } from "@/pages";
+import {
+  CalendarView,
+  CharacterListView,
+  DayView,
+  HeatmapView,
+  InsightsView,
+  RecapView,
+  SettingsView,
+  StoryView,
+} from "@/pages";
 import { useAppStore } from "@/stores";
 
 export default function App() {
@@ -16,8 +20,16 @@ export default function App() {
         return <DayView />;
       case "calendar":
         return <CalendarView />;
+      case "characters":
+        return <CharacterListView />;
+      case "story":
+        return <StoryView />;
+      case "heatmap":
+        return <HeatmapView />;
       case "insights":
         return <InsightsView />;
+      case "recap":
+        return <RecapView />;
       case "settings":
         return <SettingsView />;
       default:

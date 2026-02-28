@@ -56,7 +56,10 @@ export function InsightsView() {
             {stats.topTags.length > 0 ? (
               <div className="space-y-3">
                 {stats.topTags.map(({ tag, count }) => (
-                  <div key={tag.id} className="flex items-center justify-between">
+                  <div
+                    key={tag.id}
+                    className="flex items-center justify-between"
+                  >
                     <Badge
                       variant="secondary"
                       style={{

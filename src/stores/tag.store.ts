@@ -25,7 +25,10 @@ interface TagActions {
 
   // Category CRUD
   addCategory: (category: Omit<TagCategory, "id">) => TagCategory;
-  updateCategory: (id: string, updates: Partial<Omit<TagCategory, "id">>) => void;
+  updateCategory: (
+    id: string,
+    updates: Partial<Omit<TagCategory, "id">>,
+  ) => void;
   deleteCategory: (id: string) => void;
   reorderCategories: (categoryIds: string[]) => void;
 
@@ -50,11 +53,13 @@ export const useTagStore = create<TagState & TagActions>()(
 
         // Only initialize with defaults if no data exists
         if (categories.length === 0 && tags.length === 0) {
-          const newCategories: TagCategory[] = DEFAULT_CATEGORIES.map((cat, index) => ({
-            ...cat,
-            id: generateId(),
-            order: index,
-          }));
+          const newCategories: TagCategory[] = DEFAULT_CATEGORIES.map(
+            (cat, index) => ({
+              ...cat,
+              id: generateId(),
+              order: index,
+            }),
+          );
 
           const newTags: Tag[] = [];
           newCategories.forEach((category) => {
@@ -89,7 +94,9 @@ export const useTagStore = create<TagState & TagActions>()(
 
       updateTag: (id, updates) => {
         set((state) => ({
-          tags: state.tags.map((tag) => (tag.id === id ? { ...tag, ...updates } : tag)),
+          tags: state.tags.map((tag) =>
+            tag.id === id ? { ...tag, ...updates } : tag,
+          ),
         }));
       },
 
@@ -100,7 +107,7 @@ export const useTagStore = create<TagState & TagActions>()(
       incrementTagUsage: (tagId) => {
         set((state) => ({
           tags: state.tags.map((tag) =>
-            tag.id === tagId ? { ...tag, usageCount: tag.usageCount + 1 } : tag
+            tag.id === tagId ? { ...tag, usageCount: tag.usageCount + 1 } : tag,
           ),
         }));
       },
@@ -116,7 +123,9 @@ export const useTagStore = create<TagState & TagActions>()(
 
       updateCategory: (id, updates) => {
         set((state) => ({
-          categories: state.categories.map((cat) => (cat.id === id ? { ...cat, ...updates } : cat)),
+          categories: state.categories.map((cat) =>
+            cat.id === id ? { ...cat, ...updates } : cat,
+          ),
         }));
       },
 
@@ -153,6 +162,6 @@ export const useTagStore = create<TagState & TagActions>()(
     }),
     {
       name: "tagary:tag-store",
-    }
-  )
+    },
+  ),
 );

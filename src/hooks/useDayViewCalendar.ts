@@ -4,7 +4,11 @@
 
 import { useAppStore, useLogStore, useTagStore } from "@/stores";
 import type { Hour, LogEntry, TimeRange } from "@/types";
-import type { DateSelectArg, EventClickArg, EventInput } from "@fullcalendar/core";
+import type {
+  DateSelectArg,
+  EventClickArg,
+  EventInput,
+} from "@fullcalendar/core";
 import dayjs from "dayjs";
 import { useCallback, useMemo, useState } from "react";
 
@@ -44,27 +48,29 @@ export function useDayViewCalendar(): UseDayViewCalendarReturn {
   // Filter logs for the visible date range
   const visibleLogs = useMemo(() => {
     return logs.filter(
-      (log) => log.date >= visibleRange.start && log.date <= visibleRange.end
+      (log) => log.date >= visibleRange.start && log.date <= visibleRange.end,
     );
   }, [logs, visibleRange]);
 
   // Convert logs to FullCalendar events
   const events: EventInput[] = useMemo(() => {
-    return visibleLogs.map((log) => {
-      const tags = log.tagIds.map((id) => getTagById(id)).filter(Boolean);
-      const primaryTag = tags[0];
-      const tagNames = tags.map((t) => t?.name).join(", ");
+    return visibleLogs
+      .filter((log) => log.timeRange != null)
+      .map((log) => {
+        const tags = log.tagIds.map((id) => getTagById(id)).filter(Boolean);
+        const primaryTag = tags[0];
+        const tagNames = tags.map((t) => t?.name).join(", ");
 
-      return {
-        id: log.id,
-        title: tagNames || "Logged",
-        start: `${log.date}T${String(log.timeRange.startHour).padStart(2, "0")}:00:00`,
-        end: `${log.date}T${String(log.timeRange.endHour + 1).padStart(2, "0")}:00:00`,
-        backgroundColor: primaryTag?.color || "#3b82f6",
-        borderColor: primaryTag?.color || "#3b82f6",
-        extendedProps: { log },
-      };
-    });
+        return {
+          id: log.id,
+          title: tagNames || "Logged",
+          start: `${log.date}T${String(log.timeRange!.startHour).padStart(2, "0")}:00:00`,
+          end: `${log.date}T${String(log.timeRange!.endHour + 1).padStart(2, "0")}:00:00`,
+          backgroundColor: primaryTag?.color || "#3b82f6",
+          borderColor: primaryTag?.color || "#3b82f6",
+          extendedProps: { log },
+        };
+      });
   }, [visibleLogs, getTagById]);
 
   // Handle time slot selection (drag to create)
@@ -89,7 +95,7 @@ export function useDayViewCalendar(): UseDayViewCalendarReturn {
       // Clear selection
       selectInfo.view.calendar.unselect();
     },
-    [selectedDate, setSelectedDate]
+    [selectedDate, setSelectedDate],
   );
 
   // Handle clicking on an existing event
@@ -111,7 +117,7 @@ export function useDayViewCalendar(): UseDayViewCalendarReturn {
         setSelectedDate(newStartDate);
       }
     },
-    [selectedDate, setSelectedDate]
+    [selectedDate, setSelectedDate],
   );
 
   const handleCloseModal = useCallback(() => {

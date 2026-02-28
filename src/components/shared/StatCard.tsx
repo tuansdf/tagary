@@ -12,7 +12,12 @@ interface StatCardProps {
   icon: LucideIcon;
 }
 
-export function StatCard({ title, value, subtitle, icon: Icon }: StatCardProps) {
+export function StatCard({
+  title,
+  value,
+  subtitle,
+  icon: Icon,
+}: StatCardProps) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

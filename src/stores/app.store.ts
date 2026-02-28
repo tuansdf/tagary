@@ -9,11 +9,19 @@ import { persist } from "zustand/middleware";
 interface AppState {
   // Theme
   theme: "light" | "dark" | "system";
-  
+
   // Current view state
   selectedDate: string; // YYYY-MM-DD
-  currentView: "day" | "calendar" | "insights" | "settings";
-  
+  currentView:
+    | "day"
+    | "calendar"
+    | "insights"
+    | "settings"
+    | "characters"
+    | "story"
+    | "heatmap"
+    | "recap";
+
   // UI state
   isSidebarOpen: boolean;
 }
@@ -42,7 +50,8 @@ export const useAppStore = create<AppState & AppActions>()(
         const root = document.documentElement;
         root.classList.remove("light", "dark");
         if (theme === "system") {
-          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+            .matches
             ? "dark"
             : "light";
           root.classList.add(systemTheme);
@@ -83,8 +92,8 @@ export const useAppStore = create<AppState & AppActions>()(
         theme: state.theme,
         isSidebarOpen: state.isSidebarOpen,
       }),
-    }
-  )
+    },
+  ),
 );
 
 // Initialize theme on app load
@@ -93,10 +102,12 @@ export function initializeTheme() {
   useAppStore.getState().setTheme(theme);
 
   // Listen for system theme changes
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-    if (useAppStore.getState().theme === "system") {
-      document.documentElement.classList.remove("light", "dark");
-      document.documentElement.classList.add(e.matches ? "dark" : "light");
-    }
-  });
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      if (useAppStore.getState().theme === "system") {
+        document.documentElement.classList.remove("light", "dark");
+        document.documentElement.classList.add(e.matches ? "dark" : "light");
+      }
+    });
 }

@@ -42,13 +42,8 @@ interface UseTagManagementReturn {
 const DEFAULT_COLOR = "#3b82f6";
 
 export function useTagManagement(): UseTagManagementReturn {
-  const {
-    categories,
-    addTag,
-    updateTag,
-    addCategory,
-    updateCategory,
-  } = useTagStore();
+  const { categories, addTag, updateTag, addCategory, updateCategory } =
+    useTagStore();
 
   // Tag dialog state
   const [isTagDialogOpen, setIsTagDialogOpen] = useState(false);
@@ -59,7 +54,9 @@ export function useTagManagement(): UseTagManagementReturn {
 
   // Category dialog state
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<TagCategory | null>(null);
+  const [editingCategory, setEditingCategory] = useState<TagCategory | null>(
+    null,
+  );
   const [categoryName, setCategoryName] = useState("");
   const [categoryColor, setCategoryColor] = useState(DEFAULT_COLOR);
   const [categoryIcon, setCategoryIcon] = useState("tag");
@@ -82,7 +79,7 @@ export function useTagManagement(): UseTagManagementReturn {
       }
       setIsTagDialogOpen(true);
     },
-    [categories]
+    [categories],
   );
 
   const closeTagDialog = useCallback(() => {

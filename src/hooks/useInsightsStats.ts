@@ -36,20 +36,28 @@ export function useInsightsStats(): InsightsStats {
   return useMemo(() => {
     const today = dayjs();
     const last7Days = logs.filter((log) =>
-      dayjs(log.date).isAfter(today.subtract(7, "day"))
+      dayjs(log.date).isAfter(today.subtract(7, "day")),
     );
     const last30Days = logs.filter((log) =>
-      dayjs(log.date).isAfter(today.subtract(30, "day"))
+      dayjs(log.date).isAfter(today.subtract(30, "day")),
     );
 
     // Total hours logged
     const totalHoursLast7Days = last7Days.reduce(
-      (acc, log) => acc + (log.timeRange.endHour - log.timeRange.startHour + 1),
-      0
+      (acc, log) =>
+        acc +
+        (log.timeRange
+          ? log.timeRange.endHour - log.timeRange.startHour + 1
+          : 0),
+      0,
     );
     const totalHoursLast30Days = last30Days.reduce(
-      (acc, log) => acc + (log.timeRange.endHour - log.timeRange.startHour + 1),
-      0
+      (acc, log) =>
+        acc +
+        (log.timeRange
+          ? log.timeRange.endHour - log.timeRange.startHour + 1
+          : 0),
+      0,
     );
 
     // Days logged

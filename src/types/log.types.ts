@@ -5,7 +5,31 @@
 import type { Tag } from "./tag.types";
 
 /** Represents a single hour in the day (0-23) */
-export type Hour = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23;
+export type Hour =
+  | 0
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13
+  | 14
+  | 15
+  | 16
+  | 17
+  | 18
+  | 19
+  | 20
+  | 21
+  | 22
+  | 23;
 
 /** A time range covering one or more hours */
 export interface TimeRange {
@@ -13,13 +37,33 @@ export interface TimeRange {
   endHour: Hour;
 }
 
+/** Emotion option for the 1-5 scale */
+export interface EmotionOption {
+  score: number;
+  label: string;
+  emoji: string;
+}
+
+export const EMOTION_OPTIONS: EmotionOption[] = [
+  { score: 1, label: "Rất tệ", emoji: "😢" },
+  { score: 2, label: "Không tốt", emoji: "😕" },
+  { score: 3, label: "Bình thường", emoji: "😐" },
+  { score: 4, label: "Tốt", emoji: "🙂" },
+  { score: 5, label: "Tuyệt vời", emoji: "😄" },
+];
+
 /** A log entry for a specific time range on a specific day */
 export interface LogEntry {
   id: string;
   date: string; // ISO date string (YYYY-MM-DD)
-  timeRange: TimeRange;
+  timeRange?: TimeRange; // optional — omit for "all day" entries
   tagIds: string[];
   note?: string;
+  description?: string;
+  characterIds?: string[];
+  locationId?: string;
+  emotionScore?: number; // 1-5
+  emotionLabel?: string;
   createdAt: string;
   updatedAt: string;
 }

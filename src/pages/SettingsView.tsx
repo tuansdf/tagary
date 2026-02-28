@@ -7,18 +7,18 @@ import { TagChip } from "@/components/tags";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -129,7 +129,8 @@ export function SettingsView() {
                     />
                     <span className="font-medium">{category.name}</span>
                     <Badge variant="secondary" className="text-xs">
-                      {tags.filter((t) => t.categoryId === category.id).length} tags
+                      {tags.filter((t) => t.categoryId === category.id).length}{" "}
+                      tags
                     </Badge>
                   </div>
                   <div className="flex gap-1">
@@ -170,7 +171,9 @@ export function SettingsView() {
         <CardContent>
           <div className="space-y-6">
             {sortedCategories.map((category, index) => {
-              const categoryTags = tags.filter((t) => t.categoryId === category.id);
+              const categoryTags = tags.filter(
+                (t) => t.categoryId === category.id,
+              );
               return (
                 <div key={category.id}>
                   {index > 0 && <Separator className="mb-6" />}
@@ -205,7 +208,9 @@ export function SettingsView() {
                       </div>
                     ))}
                     {categoryTags.length === 0 && (
-                      <p className="text-sm text-muted-foreground">No tags in this category</p>
+                      <p className="text-sm text-muted-foreground">
+                        No tags in this category
+                      </p>
                     )}
                   </div>
                 </div>
@@ -276,7 +281,9 @@ export function SettingsView() {
       <Dialog open={isCategoryDialogOpen} onOpenChange={closeCategoryDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingCategory ? "Edit Category" : "New Category"}</DialogTitle>
+            <DialogTitle>
+              {editingCategory ? "Edit Category" : "New Category"}
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
