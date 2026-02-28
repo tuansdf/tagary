@@ -4,6 +4,7 @@ import { useAppStore, useLocationStore, useLogStore } from "@/stores";
 import dayjs from "dayjs";
 import { MapPin } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router";
 
 const MONTHS = [
   "Tháng 1",
@@ -23,7 +24,8 @@ const MONTHS = [
 export function HeatmapView() {
   const { logs } = useLogStore();
   const { locations } = useLocationStore();
-  const { setSelectedDate, setCurrentView } = useAppStore();
+  const { setSelectedDate } = useAppStore();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"calendar" | "location">(
     "calendar",
   );
@@ -103,7 +105,7 @@ export function HeatmapView() {
           }}
           onClick={() => {
             setSelectedDate(dateStr);
-            setCurrentView("day");
+            navigate("/");
           }}
         />,
       );

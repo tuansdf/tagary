@@ -12,15 +12,6 @@ interface AppState {
 
   // Current view state
   selectedDate: string; // YYYY-MM-DD
-  currentView:
-    | "day"
-    | "calendar"
-    | "insights"
-    | "settings"
-    | "characters"
-    | "story"
-    | "heatmap"
-    | "recap";
 
   // UI state
   isSidebarOpen: boolean;
@@ -29,7 +20,6 @@ interface AppState {
 interface AppActions {
   setTheme: (theme: AppState["theme"]) => void;
   setSelectedDate: (date: string) => void;
-  setCurrentView: (view: AppState["currentView"]) => void;
   toggleSidebar: () => void;
   goToToday: () => void;
   goToPreviousDay: () => void;
@@ -41,7 +31,6 @@ export const useAppStore = create<AppState & AppActions>()(
     (set, get) => ({
       theme: "system",
       selectedDate: dayjs().format("YYYY-MM-DD"),
-      currentView: "day",
       isSidebarOpen: true,
 
       setTheme: (theme) => {
@@ -62,10 +51,6 @@ export const useAppStore = create<AppState & AppActions>()(
 
       setSelectedDate: (date) => {
         set({ selectedDate: dayjs(date).format("YYYY-MM-DD") });
-      },
-
-      setCurrentView: (view) => {
-        set({ currentView: view });
       },
 
       toggleSidebar: () => {

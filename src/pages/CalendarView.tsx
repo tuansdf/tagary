@@ -10,10 +10,12 @@ import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import dayjs from "dayjs";
 import { useMemo } from "react";
+import { useNavigate } from "react-router";
 
 export function CalendarView() {
   const { logs } = useLogStore();
-  const { setSelectedDate, setCurrentView } = useAppStore();
+  const { setSelectedDate } = useAppStore();
+  const navigate = useNavigate();
 
   // Convert logs to calendar events
   const events = useMemo(() => {
@@ -37,7 +39,7 @@ export function CalendarView() {
 
   const handleDateClick = (info: { dateStr: string }) => {
     setSelectedDate(info.dateStr);
-    setCurrentView("day");
+    navigate("/");
   };
 
   return (

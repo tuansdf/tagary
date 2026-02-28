@@ -29,28 +29,25 @@ import {
   Users,
 } from "lucide-react";
 import { useEffect } from "react";
+import { Link, Outlet, useLocation } from "react-router";
 
 interface AppLayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const NAV_ITEMS = [
-  { id: "day" as const, label: "Daily Log", icon: LayoutGrid },
-  { id: "calendar" as const, label: "Calendar", icon: CalendarDays },
-  { id: "characters" as const, label: "Nhân vật", icon: Users },
-  { id: "story" as const, label: "Story", icon: History },
-  { id: "heatmap" as const, label: "Heatmap", icon: Flame },
-  { id: "insights" as const, label: "Insights", icon: BarChart3 },
-  { id: "settings" as const, label: "Settings", icon: Settings },
+  { path: "/", label: "Daily Log", icon: LayoutGrid },
+  { path: "/calendar", label: "Calendar", icon: CalendarDays },
+  { path: "/characters", label: "Nhân vật", icon: Users },
+  { path: "/story", label: "Story", icon: History },
+  { path: "/heatmap", label: "Heatmap", icon: Flame },
+  { path: "/insights", label: "Insights", icon: BarChart3 },
+  { path: "/settings", label: "Settings", icon: Settings },
 ];
 
-function NavContent({
-  currentView,
-  setCurrentView,
-}: {
-  currentView: string;
-  setCurrentView: (view: (typeof NAV_ITEMS)[number]["id"]) => void;
-}) {
+function NavContent() {
+  const { pathname } = useLocation();
+
   return (
     <div className="flex h-full flex-col">
       {/* Logo */}
@@ -63,20 +60,25 @@ function NavContent({
 
       {/* Navigation */}
       <nav className="flex-1 space-y-1 p-2">
-        {NAV_ITEMS.map((item) => (
-          <Button
-            key={item.id}
-            variant={currentView === item.id ? "secondary" : "ghost"}
-            className={cn(
-              "w-full justify-start gap-3",
-              currentView === item.id && "bg-secondary font-medium",
-            )}
-            onClick={() => setCurrentView(item.id)}
-          >
-            <item.icon className="h-5 w-5" />
-            {item.label}
-          </Button>
-        ))}
+        {NAV_ITEMS.map((item) => {
+          const isActive = pathname === item.path;
+          return (
+            <Button
+              key={item.path}
+              variant={isActive ? "secondary" : "ghost"}
+              className={cn(
+                "w-full justify-start gap-3",
+                isActive && "bg-secondary font-medium",
+              )}
+              asChild
+            >
+              <Link to={item.path}>
+                <item.icon className="h-5 w-5" />
+                {item.label}
+              </Link>
+            </Button>
+          );
+        })}
       </nav>
 
       {/* Footer */}
@@ -90,8 +92,7 @@ function NavContent({
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const { currentView, setCurrentView, isSidebarOpen, toggleSidebar } =
-    useAppStore();
+  const { isSidebarOpen, toggleSidebar } = useAppStore();
   const { initialize, initialized } = useTagStore();
   const { initialize: initLocations, initialized: locInitialized } =
     useLocationStore();
@@ -112,7 +113,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           isSidebarOpen ? "w-64" : "w-0 overflow-hidden",
         )}
       >
-        <NavContent currentView={currentView} setCurrentView={setCurrentView} />
+        <NavContent />
       </aside>
 
       {/* Mobile Sidebar */}
@@ -128,10 +129,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0">
           <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-          <NavContent
-            currentView={currentView}
-            setCurrentView={setCurrentView}
-          />
+          <NavContent />
         </SheetContent>
       </Sheet>
 
@@ -147,7 +145,10 @@ export function AppLayout({ children }: AppLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <div className="flex-1 pt-14 md:pt-0">{children}</div>
+        <div className="flex-1 pt-14 md:pt-0">
+          <Outlet />
+          {children}
+        </div>
       </main>
     </div>
   );

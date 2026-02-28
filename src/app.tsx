@@ -9,11 +9,12 @@ import {
   SettingsView,
   StoryView,
 } from "@/pages";
-import { useAppStore, useSyncStore } from "@/stores";
+import { useSyncStore } from "@/stores";
 import { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router";
 
 export default function App() {
-  const { currentView, setCurrentView } = useAppStore();
+  const navigate = useNavigate();
   const { handleCallback, checkConnection } = useSyncStore();
 
   // Handle Dropbox OAuth callback
@@ -22,36 +23,25 @@ export default function App() {
     const code = params.get("code");
     if (code) {
       handleCallback(code).then(() => {
-        // Clean URL and navigate to settings
         window.history.replaceState({}, "", window.location.pathname);
-        setCurrentView("settings");
+        navigate("/settings");
         checkConnection();
       });
     }
-  }, [handleCallback, setCurrentView, checkConnection]);
+  }, [handleCallback, navigate, checkConnection]);
 
-  const renderView = () => {
-    switch (currentView) {
-      case "day":
-        return <DayView />;
-      case "calendar":
-        return <CalendarView />;
-      case "characters":
-        return <CharacterListView />;
-      case "story":
-        return <StoryView />;
-      case "heatmap":
-        return <HeatmapView />;
-      case "insights":
-        return <InsightsView />;
-      case "recap":
-        return <RecapView />;
-      case "settings":
-        return <SettingsView />;
-      default:
-        return <DayView />;
-    }
-  };
-
-  return <AppLayout>{renderView()}</AppLayout>;
+  return (
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route index element={<DayView />} />
+        <Route path="calendar" element={<CalendarView />} />
+        <Route path="characters" element={<CharacterListView />} />
+        <Route path="story" element={<StoryView />} />
+        <Route path="heatmap" element={<HeatmapView />} />
+        <Route path="insights" element={<InsightsView />} />
+        <Route path="recap" element={<RecapView />} />
+        <Route path="settings" element={<SettingsView />} />
+      </Route>
+    </Routes>
+  );
 }
