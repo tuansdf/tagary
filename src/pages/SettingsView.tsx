@@ -3,6 +3,7 @@
  */
 
 import { PageHeader } from "@/components/shared";
+import { DropboxSync, SyncConflictDialog } from "@/components/sync";
 import { TagChip } from "@/components/tags";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -66,6 +67,8 @@ export function SettingsView() {
         description="Manage your tags and preferences"
       />
 
+      <SyncConflictDialog />
+
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Theme Settings */}
         <Card>
@@ -102,6 +105,9 @@ export function SettingsView() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Dropbox Sync */}
+        <DropboxSync />
 
         {/* Categories */}
         <Card>
