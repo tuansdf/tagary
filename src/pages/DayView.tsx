@@ -5,7 +5,7 @@
 import { LogEntryModal } from "@/components/log-entry";
 import { PageHeader } from "@/components/shared";
 import { Card, CardContent } from "@/components/ui/card";
-import { useDayViewCalendar } from "@/hooks";
+import { useDayViewCalendar, useIsMobile } from "@/hooks";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
@@ -14,6 +14,7 @@ import { useRef } from "react";
 
 export function DayView() {
   const calendarRef = useRef<FullCalendar>(null);
+  const isMobile = useIsMobile();
   const {
     isModalOpen,
     selectedRange,
@@ -52,11 +53,15 @@ export function DayView() {
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="timeGridDay"
             initialDate={selectedDate}
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "timeGridDay,timeGridWeek",
-            }}
+            headerToolbar={
+              isMobile
+                ? { left: "prev,next", center: "title", right: "today" }
+                : {
+                    left: "prev,next today",
+                    center: "title",
+                    right: "timeGridDay,timeGridWeek",
+                  }
+            }
             titleFormat={{ day: "2-digit", month: "2-digit", year: "numeric" }}
             slotMinTime="00:00:00"
             slotMaxTime="24:00:00"

@@ -124,7 +124,7 @@ export function StoryView() {
                       key={log.id}
                       className="transition-colors hover:bg-accent/30"
                     >
-                      <CardContent className="p-3">
+                      <CardContent className="p-2.5 md:p-3">
                         <div className="flex items-start gap-3">
                           {/* Time */}
                           <div className="shrink-0 text-xs font-mono text-muted-foreground min-w-[50px]">

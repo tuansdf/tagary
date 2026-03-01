@@ -1,15 +1,10 @@
 /**
- * AppLayout - Main layout with sidebar navigation
+ * AppLayout - Main layout with sidebar (desktop) and bottom nav (mobile)
  */
 
+import { BottomNav } from "@/components/layout/BottomNav";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import {
   initializeTheme,
@@ -118,23 +113,6 @@ export function AppLayout({ children }: AppLayoutProps) {
         <NavContent />
       </aside>
 
-      {/* Mobile Sidebar */}
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute left-4 top-4 z-50 md:hidden"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0">
-          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-          <NavContent />
-        </SheetContent>
-      </Sheet>
-
       {/* Main Content */}
       <main className="flex flex-1 flex-col overflow-auto">
         {/* Desktop Header with sidebar toggle */}
@@ -146,12 +124,15 @@ export function AppLayout({ children }: AppLayoutProps) {
           </div>
         </header>
 
-        {/* Page Content */}
-        <div className="flex-1 pt-14 md:pt-0">
+        {/* Page Content — pb-20 for bottom nav clearance on mobile */}
+        <div className="flex-1 pb-20 md:pb-0">
           <Outlet />
           {children}
         </div>
       </main>
+
+      {/* Mobile Bottom Nav */}
+      <BottomNav />
     </div>
   );
 }

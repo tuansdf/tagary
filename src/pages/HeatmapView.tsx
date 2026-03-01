@@ -170,8 +170,10 @@ export function HeatmapView() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {Array.from({ length: 12 }, (_, i) => renderMonth(i))}
+            <div className="overflow-x-auto">
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 min-w-70">
+                {Array.from({ length: 12 }, (_, i) => renderMonth(i))}
+              </div>
             </div>
 
             {/* Legend */}

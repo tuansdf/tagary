@@ -5,6 +5,7 @@
 import { PageHeader } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useIsMobile } from "@/hooks";
 import { useAppStore, useLogStore } from "@/stores";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -18,6 +19,7 @@ export function CalendarView() {
   const { logs } = useLogStore();
   const { setSelectedDate } = useAppStore();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   // Convert logs to calendar events
   const events = useMemo(() => {
@@ -75,11 +77,11 @@ export function CalendarView() {
               initialView="dayGridMonth"
               events={events}
               dateClick={handleDateClick}
-              headerToolbar={{
-                left: "prev,next today",
-                center: "title",
-                right: "",
-              }}
+              headerToolbar={
+                isMobile
+                  ? { left: "prev,next", center: "title", right: "today" }
+                  : { left: "prev,next today", center: "title", right: "" }
+              }
               height="auto"
               dayMaxEvents={2}
               eventDisplay="block"
