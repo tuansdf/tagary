@@ -115,7 +115,7 @@ export function RecapView() {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
       <div className="flex items-center justify-between">
-        <PageHeader title="Recap" description="Tổng hợp nhật ký của bạn" />
+        <PageHeader title="Recap" description="Summary of your diary" />
         <div className="flex gap-1 rounded-lg bg-secondary p-1">
           {(["7d", "30d", "all"] as RecapRange[]).map((r) => (
             <Button
@@ -125,7 +125,7 @@ export function RecapView() {
               className={`text-xs ${range === r ? "bg-background shadow-sm" : ""}`}
               onClick={() => setRange(r)}
             >
-              {r === "7d" ? "7 ngày" : r === "30d" ? "30 ngày" : "Tất cả"}
+              {r === "7d" ? "7 days" : r === "30d" ? "30 days" : "All time"}
             </Button>
           ))}
         </div>
@@ -134,27 +134,27 @@ export function RecapView() {
       {/* Quick Stats */}
       <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Tổng sự kiện"
+          title="Total Events"
           value={overallStats.totalLogs}
-          subtitle={`${overallStats.uniqueDays} ngày`}
+          subtitle={`${overallStats.uniqueDays} days`}
           icon={Calendar}
         />
         <StatCard
-          title="Nhân vật"
+          title="Characters"
           value={overallStats.uniqueCharacters}
-          subtitle="xuất hiện"
+          subtitle="appeared"
           icon={Users}
         />
         <StatCard
-          title="Địa điểm"
+          title="Locations"
           value={overallStats.uniqueLocations}
-          subtitle="đã đến"
+          subtitle="visited"
           icon={MapPin}
         />
         <StatCard
-          title="Cảm xúc TB"
+          title="Avg Mood"
           value={getEmotionDisplay(overallStats.avgEmotion)}
-          subtitle="trung bình"
+          subtitle="average"
           icon={Smile}
         />
       </div>
@@ -163,12 +163,12 @@ export function RecapView() {
         {/* By Character */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Theo nhân vật</CardTitle>
+            <CardTitle className="text-base">By Character</CardTitle>
           </CardHeader>
           <CardContent>
             {characterStats.length === 0 ? (
               <p className="text-center text-sm text-muted-foreground py-6">
-                Chưa có dữ liệu nhân vật
+                No character data yet
               </p>
             ) : (
               <div className="space-y-3">
@@ -183,7 +183,7 @@ export function RecapView() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-muted-foreground">
-                            {totalLogs} lần
+                            {totalLogs} times
                           </span>
                           {avgEmotion && (
                             <span className="text-xs">
@@ -193,7 +193,7 @@ export function RecapView() {
                         </div>
                         {recentDate && (
                           <p className="text-[10px] text-muted-foreground">
-                            Gần nhất: {dayjs(recentDate).format("DD/MM")}
+                            Last: {dayjs(recentDate).format("DD/MM")}
                           </p>
                         )}
                       </div>
@@ -207,12 +207,12 @@ export function RecapView() {
         {/* By Location */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Theo địa điểm</CardTitle>
+            <CardTitle className="text-base">By Location</CardTitle>
           </CardHeader>
           <CardContent>
             {locationStats.length === 0 ? (
               <p className="text-center text-sm text-muted-foreground py-6">
-                Chưa có dữ liệu địa điểm
+                No location data yet
               </p>
             ) : (
               <div className="space-y-3">
@@ -232,7 +232,7 @@ export function RecapView() {
                             </span>
                           )}
                           <span className="text-xs text-muted-foreground">
-                            {count} lần
+                            {count} times
                           </span>
                         </div>
                       </div>

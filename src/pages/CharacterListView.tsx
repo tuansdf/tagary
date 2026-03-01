@@ -34,12 +34,12 @@ export function CharacterListView() {
     <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
       <div className="flex items-center justify-between">
         <PageHeader
-          title="Nhân vật"
-          description="Quản lý các nhân vật trong nhật ký"
+          title="Characters"
+          description="Manage characters in your diary"
         />
         <Button onClick={handleAdd} size="sm" className="gap-1.5">
           <Plus className="h-4 w-4" />
-          Thêm mới
+          Add
         </Button>
       </div>
 
@@ -48,13 +48,13 @@ export function CharacterListView() {
           <CardContent className="flex flex-col items-center justify-center py-16">
             <User className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-muted-foreground text-center">
-              Chưa có nhân vật nào.
+              No characters yet.
               <br />
-              Thêm nhân vật để bắt đầu ghi nhật ký!
+              Add characters to start logging!
             </p>
             <Button onClick={handleAdd} className="mt-4 gap-1.5">
               <Plus className="h-4 w-4" />
-              Thêm nhân vật đầu tiên
+              Add first character
             </Button>
           </CardContent>
         </Card>

@@ -33,6 +33,18 @@ export function DayView() {
         description="Track your day hour by hour with tags"
       />
 
+      {events.length === 0 && (
+        <div className="flex items-center gap-3 rounded-lg border border-dashed border-primary/30 bg-primary/5 px-4 py-3">
+          <span className="text-2xl">📝</span>
+          <div>
+            <p className="text-sm font-medium">No entries yet for this day</p>
+            <p className="text-xs text-muted-foreground">
+              Click on a time slot in the calendar below to start logging
+            </p>
+          </div>
+        </div>
+      )}
+
       <Card className="flex-1 py-4 md:py-6">
         <CardContent className="px-4 md:px-6">
           <FullCalendar

@@ -43,7 +43,7 @@ export function CharacterMention({
         <input
           ref={inputRef}
           type="text"
-          placeholder="Tìm nhân vật..."
+          placeholder="Search characters..."
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);

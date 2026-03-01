@@ -64,14 +64,14 @@ export function StoryView() {
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
-      <PageHeader title="Story" description="Dòng thời gian nhật ký của bạn" />
+      <PageHeader title="Story" description="Your diary timeline" />
 
       {/* Filters */}
       <div className="flex gap-2">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Tìm kiếm sự kiện..."
+            placeholder="Search entries..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
@@ -83,7 +83,7 @@ export function StoryView() {
             size="sm"
             onClick={() => setFilterCharacterId(undefined)}
           >
-            Xóa bộ lọc
+            Clear filter
           </Button>
         )}
       </div>
@@ -93,7 +93,7 @@ export function StoryView() {
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
             <Calendar className="mx-auto mb-3 h-10 w-10" />
-            <p>Chưa có sự kiện nào.</p>
+            <p>No entries yet.</p>
           </CardContent>
         </Card>
       ) : (
@@ -107,7 +107,7 @@ export function StoryView() {
                   {dayjs(date).format("dddd, DD/MM/YYYY")}
                 </span>
                 <Badge variant="outline" className="text-xs">
-                  {entries.length} sự kiện
+                  {entries.length} entries
                 </Badge>
               </div>
 
@@ -140,7 +140,7 @@ export function StoryView() {
                               {emoji && (
                                 <span
                                   className="text-lg"
-                                  title={`Cảm xúc: ${log.emotionScore}/5`}
+                                  title={`Mood: ${log.emotionScore}/5`}
                                 >
                                   {emoji}
                                 </span>

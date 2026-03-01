@@ -45,11 +45,11 @@ export interface EmotionOption {
 }
 
 export const EMOTION_OPTIONS: EmotionOption[] = [
-  { score: 1, label: "Rất tệ", emoji: "😢" },
-  { score: 2, label: "Không tốt", emoji: "😕" },
-  { score: 3, label: "Bình thường", emoji: "😐" },
-  { score: 4, label: "Tốt", emoji: "🙂" },
-  { score: 5, label: "Tuyệt vời", emoji: "😄" },
+  { score: 1, label: "Terrible", emoji: "😢" },
+  { score: 2, label: "Bad", emoji: "😕" },
+  { score: 3, label: "Okay", emoji: "😐" },
+  { score: 4, label: "Good", emoji: "🙂" },
+  { score: 5, label: "Great", emoji: "😄" },
 ];
 
 /** A log entry for a specific time range on a specific day */

@@ -7,18 +7,18 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 
 const MONTHS = [
-  "Tháng 1",
-  "Tháng 2",
-  "Tháng 3",
-  "Tháng 4",
-  "Tháng 5",
-  "Tháng 6",
-  "Tháng 7",
-  "Tháng 8",
-  "Tháng 9",
-  "Tháng 10",
-  "Tháng 11",
-  "Tháng 12",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export function HeatmapView() {
@@ -89,7 +89,7 @@ export function HeatmapView() {
         <button
           key={d}
           type="button"
-          title={`${dateStr}: ${count} sự kiện`}
+          title={`${dateStr}: ${count} entries`}
           className="h-4 w-4 rounded-sm transition-colors hover:ring-1 hover:ring-primary"
           style={{
             backgroundColor:
@@ -123,7 +123,7 @@ export function HeatmapView() {
     <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
       <PageHeader
         title="Heatmap"
-        description="Trực quan hóa hoạt động theo thời gian & địa điểm"
+        description="Visualize your activity over time & by location"
       />
 
       {/* Tab switcher */}
@@ -136,7 +136,7 @@ export function HeatmapView() {
           }`}
           onClick={() => setActiveTab("calendar")}
         >
-          📅 Theo thời gian
+          📅 By Time
         </button>
         <button
           className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
@@ -146,14 +146,14 @@ export function HeatmapView() {
           }`}
           onClick={() => setActiveTab("location")}
         >
-          📍 Theo địa điểm
+          📍 By Location
         </button>
       </div>
 
       {activeTab === "calendar" ? (
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-base">Năm {viewYear}</CardTitle>
+            <CardTitle className="text-base">Year {viewYear}</CardTitle>
             <div className="flex gap-1">
               <button
                 className="px-2 py-1 text-xs rounded hover:bg-accent"
@@ -176,7 +176,7 @@ export function HeatmapView() {
 
             {/* Legend */}
             <div className="flex items-center gap-2 mt-4 text-xs text-muted-foreground">
-              <span>Ít</span>
+              <span>Less</span>
               {[0, 1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
@@ -195,20 +195,20 @@ export function HeatmapView() {
                   }}
                 />
               ))}
-              <span>Nhiều</span>
+              <span>More</span>
             </div>
           </CardContent>
         </Card>
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Tần suất theo địa điểm</CardTitle>
+            <CardTitle className="text-base">Location Frequency</CardTitle>
           </CardHeader>
           <CardContent>
             {locationData.length === 0 ? (
               <div className="py-8 text-center text-muted-foreground">
                 <MapPin className="mx-auto mb-2 h-8 w-8" />
-                <p>Chưa có dữ liệu địa điểm.</p>
+                <p>No location data yet.</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -220,7 +220,7 @@ export function HeatmapView() {
                         {name}
                       </span>
                       <span className="text-sm text-muted-foreground">
-                        {count} lần
+                        {count} times
                       </span>
                     </div>
                     <div className="h-2.5 w-full rounded-full bg-secondary">

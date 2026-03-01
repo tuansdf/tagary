@@ -86,7 +86,7 @@ export function LocationPicker({ selectedId, onSelect }: LocationPickerProps) {
           <input
             ref={inputRef}
             type="text"
-            placeholder="Chọn địa điểm..."
+            placeholder="Search location..."
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -128,7 +128,7 @@ export function LocationPicker({ selectedId, onSelect }: LocationPickerProps) {
               <Input
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                placeholder="Tên địa điểm mới..."
+                placeholder="New location name..."
                 className="h-7 text-xs"
                 onKeyDown={(e) => e.key === "Enter" && handleCreateLocation()}
               />
@@ -147,7 +147,7 @@ export function LocationPicker({ selectedId, onSelect }: LocationPickerProps) {
               onClick={() => setIsCreating(true)}
             >
               <Plus className="h-3.5 w-3.5" />
-              Thêm địa điểm mới
+              Add new location
             </button>
           )}
         </div>

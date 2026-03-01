@@ -3,6 +3,7 @@
  */
 
 import { PageHeader } from "@/components/shared";
+import { ConfirmDialog } from "@/components/shared";
 import { DropboxSync, SyncConflictDialog } from "@/components/sync";
 import { TagChip } from "@/components/tags";
 import { Badge } from "@/components/ui/badge";
@@ -26,10 +27,15 @@ import { Separator } from "@/components/ui/separator";
 import { useTagManagement } from "@/hooks";
 import { useAppStore, useTagStore } from "@/stores";
 import { Monitor, Moon, Pencil, Plus, Sun, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 export function SettingsView() {
   const { tags, deleteTag, deleteCategory } = useTagStore();
   const { theme, setTheme } = useAppStore();
+  const [pendingDeleteTag, setPendingDeleteTag] = useState<string | null>(null);
+  const [pendingDeleteCategory, setPendingDeleteCategory] = useState<
+    string | null
+  >(null);
 
   const {
     // Tag dialog
@@ -150,7 +156,7 @@ export function SettingsView() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => deleteCategory(category.id)}
+                      onClick={() => setPendingDeleteCategory(category.id)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -206,7 +212,7 @@ export function SettingsView() {
                             variant="destructive"
                             size="icon"
                             className="h-5 w-5"
-                            onClick={() => deleteTag(tag.id)}
+                            onClick={() => setPendingDeleteTag(tag.id)}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -327,6 +333,28 @@ export function SettingsView() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmations */}
+      <ConfirmDialog
+        open={!!pendingDeleteTag}
+        onConfirm={() => {
+          if (pendingDeleteTag) deleteTag(pendingDeleteTag);
+          setPendingDeleteTag(null);
+        }}
+        onCancel={() => setPendingDeleteTag(null)}
+        title="Delete Tag"
+        description="Are you sure you want to delete this tag? This action cannot be undone."
+      />
+      <ConfirmDialog
+        open={!!pendingDeleteCategory}
+        onConfirm={() => {
+          if (pendingDeleteCategory) deleteCategory(pendingDeleteCategory);
+          setPendingDeleteCategory(null);
+        }}
+        onCancel={() => setPendingDeleteCategory(null)}
+        title="Delete Category"
+        description="Are you sure you want to delete this category and all its tags? This action cannot be undone."
+      />
     </div>
   );
 }

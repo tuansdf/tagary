@@ -25,6 +25,7 @@ import {
   History,
   LayoutGrid,
   Menu,
+  Repeat,
   Settings,
   Users,
 } from "lucide-react";
@@ -38,10 +39,11 @@ interface AppLayoutProps {
 const NAV_ITEMS = [
   { path: "/", label: "Daily Log", icon: LayoutGrid },
   { path: "/calendar", label: "Calendar", icon: CalendarDays },
-  { path: "/characters", label: "Nhân vật", icon: Users },
+  { path: "/characters", label: "Characters", icon: Users },
   { path: "/story", label: "Story", icon: History },
   { path: "/heatmap", label: "Heatmap", icon: Flame },
   { path: "/insights", label: "Insights", icon: BarChart3 },
+  { path: "/recap", label: "Recap", icon: Repeat },
   { path: "/settings", label: "Settings", icon: Settings },
 ];
 

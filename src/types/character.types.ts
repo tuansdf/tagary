@@ -9,22 +9,22 @@ export type Relationship =
   | "other";
 
 export const RELATIONSHIP_LABELS: Record<Relationship, string> = {
-  friend: "Bạn bè",
-  colleague: "Đồng nghiệp",
-  sibling: "Anh/Chị/Em",
-  parent: "Bố/Mẹ",
-  child: "Con",
-  partner: "Người yêu",
-  classmate: "Bạn cùng lớp",
-  other: "Khác",
+  friend: "Friend",
+  colleague: "Colleague",
+  sibling: "Sibling",
+  parent: "Parent",
+  child: "Child",
+  partner: "Partner",
+  classmate: "Classmate",
+  other: "Other",
 };
 
 export type Gender = "male" | "female" | "other";
 
 export const GENDER_LABELS: Record<Gender, string> = {
-  male: "Nam",
-  female: "Nữ",
-  other: "Khác",
+  male: "Male",
+  female: "Female",
+  other: "Other",
 };
 
 export interface Character {
